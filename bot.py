@@ -6,8 +6,8 @@ import threading
 from flask import Flask
 
 # --- CONFIG ---
-API_TOKEN = '8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk'
-bot = telebot.TeleBot(API_TOKEN)
+API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
+bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
 PATH = "/sdcard/Download/kushal/"
 file_id_cache = {} 
 
