@@ -8,7 +8,7 @@ from flask import Flask
 # --- CONFIG ---
 API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
 bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
-ADMIN_ID = 6632236983  # <--- Yahan apni Telegram ID dalen
+ADMIN_ID = 8086760320  # <--- Yahan apni Telegram ID dalen
 PATH = "./" 
 file_id_cache = {} 
 USER_FILE = "users.txt"
@@ -42,7 +42,7 @@ T1 = """😍 <b>80000+ zip file's Channel</b> 💔
 🤔 Want to Buy?
 🚀 Offers Are Live Now!
 
-Price: <strike>Rs. 3,999.00</strike> <b>Rs. 1,499.00</b>
+Price: <strike>Rs. 3,999.00</strike> <b>Rs. 99.00</b>
 🔥 174 people bought this"""
 
 T2 = """📽️ <b>AVAILABLE VIDEOS COLLECTION</b> 🎁
@@ -108,7 +108,7 @@ def get_keyboard(p):
     m.add(
         types.InlineKeyboardButton("📽️ WATCH DEMO VIDEO", url="https://t.me/+JBVaDAvX-To1NzRl"),
         types.InlineKeyboardButton(f"🔐 PAY Rs. {p} - UNLOCK NOW", callback_data=f"pay_{p}"),
-        types.InlineKeyboardButton("💬 CONTACT ADMIN", url="t.me/RAHU_LKING89")
+        types.InlineKeyboardButton("💬 CONTACT ADMIN", url="t.me/JOD_HEREE_51")
     )
     return m
 
