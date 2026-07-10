@@ -8,7 +8,7 @@ from flask import Flask
 # --- CONFIG ---
 API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
 bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
-ADMIN_ID = 123456789  # <--- Yahan apni Telegram ID dalen
+ADMIN_ID = 6632236983  # <--- Yahan apni Telegram ID dalen
 PATH = "./" 
 file_id_cache = {} 
 USER_FILE = "users.txt"
