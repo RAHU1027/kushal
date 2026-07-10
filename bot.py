@@ -8,7 +8,8 @@ from flask import Flask
 # --- CONFIG ---
 API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
 bot = telebot.TeleBot("8956223424:AAE9CVT_oT1dfodhlwm-8y4EnPsxm3BIlj0")
-PATH = "/sdcard/Download/kushal/"
+# Path change karke "./" kar diya taaki Render files ko dhoond sake
+PATH = "./" 
 file_id_cache = {} 
 
 # --- WEB SERVICE FOR 24/7 ---
@@ -105,12 +106,6 @@ def send_fix(uid, f, p, cap):
     full_path = os.path.join(PATH, f)
     markup = get_keyboard(p)
     try:
-        if f in file_id_cache:
-            fid = file_id_cache[f]
-            if f.endswith(".mp4"): bot.send_video(uid, fid, caption=cap, parse_mode='HTML', reply_markup=markup)
-            else: bot.send_photo(uid, fid, caption=cap, parse_mode='HTML', reply_markup=markup)
-            return
-
         if os.path.exists(full_path):
             with open(full_path, 'rb') as file:
                 if f.endswith(".mp4"):
@@ -119,7 +114,8 @@ def send_fix(uid, f, p, cap):
                 else:
                     s = bot.send_photo(uid, file, caption=cap, parse_mode='HTML', reply_markup=markup)
                     file_id_cache[f] = s.photo[-1].file_id
-    except: pass
+    except Exception as e:
+        print(f"Error: {e}")
 
 @bot.message_handler(commands=['start'])
 def start(m):
