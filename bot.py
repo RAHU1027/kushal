@@ -7,7 +7,7 @@ from flask import Flask
 
 # --- CONFIG ---
 API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
-bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
+bot = telebot.TeleBot("8956223424:AAE9CVT_oT1dfodhlwm-8y4EnPsxm3BIlj0")
 PATH = "/sdcard/Download/kushal/"
 file_id_cache = {} 
 
