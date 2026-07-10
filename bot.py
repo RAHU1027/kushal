@@ -42,7 +42,7 @@ T1 = """😍 <b>80000+ zip file's Channel</b> 💔
 🤔 Want to Buy?
 🚀 Offers Are Live Now!
 
-Price: <strike>Rs. 3,999.00</strike> <b>Rs. 99.00</b>
+Price: <strike>Rs. 3,999.00</strike> <b>Rs. 999.00</b>
 🔥 174 people bought this"""
 
 T2 = """📽️ <b>AVAILABLE VIDEOS COLLECTION</b> 🎁
