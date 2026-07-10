@@ -1,13 +1,12 @@
 import telebot
-from telebot import types, apihelper
+from telebot import types
 import os
 import time
 import threading
 from flask import Flask
 
 # --- CONFIG ---
-# Token ko environment variable mein rakhna safe hai
-API_TOKEN = os.environ.get('API_TOKEN', '5b108bd2fdd31c0c34bc65f24a5216a0')
+API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
 bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
 PATH = "/sdcard/Download/kushal/"
 file_id_cache = {} 
@@ -21,14 +20,7 @@ def home():
 def run_web_server():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
-# --- TIME ROBOT (UPTIME SYSTEM) ---
-def time_robot():
-    while True:
-        # Yeh system har 30 min mein ping karega taaki bot active rahe
-        print("🤖 Time Robot: System Active & Checking Uptime...")
-        time.sleep(1800) 
-
-# --- ORIGINAL TEXT DATA ---
+# --- EXACT VIDEO DATA ---
 T1 = """😍 <b>80000+ zip file's Channel</b> 💔
 ━━━━━━━━━━━━━━━━━━━━
 <b>Benefits:</b>
@@ -127,8 +119,7 @@ def send_fix(uid, f, p, cap):
                 else:
                     s = bot.send_photo(uid, file, caption=cap, parse_mode='HTML', reply_markup=markup)
                     file_id_cache[f] = s.photo[-1].file_id
-    except Exception as e:
-        print(f"Send Error: {e}")
+    except: pass
 
 @bot.message_handler(commands=['start'])
 def start(m):
@@ -140,7 +131,7 @@ def start(m):
     ]
     for f, p, cap in data:
         send_fix(uid, f, p, cap)
-        time.sleep(0.5)
+        time.sleep(0.3)
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
@@ -150,15 +141,8 @@ def callback(call):
         bot.send_message(call.message.chat.id, msg, parse_mode='HTML')
     bot.answer_callback_query(call.id)
 
-# --- STARTING WITH UPTIME & AUTO-RECOVERY ---
+# --- STARTING ---
 if __name__ == "__main__":
-    threading.Thread(target=run_web_server, daemon=True).start()
-    threading.Thread(target=time_robot, daemon=True).start()
-    
+    threading.Thread(target=run_web_server).start()
     print("🚀 ULTRA SPEED & PERFECT ORDER LIVE!")
-    while True:
-        try:
-            bot.infinity_polling(timeout=60, long_polling_timeout=60)
-        except Exception as e:
-            print(f"CRASHED! Restarting in 15s... Error: {e}")
-            time.sleep(15)
+    bot.infinity_polling()
