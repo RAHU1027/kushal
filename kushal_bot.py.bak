@@ -2,9 +2,9 @@ import telebot, os, time
 from telebot import types
 
 # --- CONFIG ---
-API_TOKEN = '8650620955:AAGbeAnHtxhYqaGwG9XZaEhkTP7nMLds1cA'
+API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
 ADMIN_ID = 6523912634  # <--- APNI REAL ID YAHA DALO
-bot = telebot.TeleBot(API_TOKEN)
+bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
 PATH = "/sdcard/Download/kushal/"
 
 # Global Prices & Cache
