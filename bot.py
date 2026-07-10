@@ -101,7 +101,7 @@ def get_keyboard(p):
     m = types.InlineKeyboardMarkup(row_width=1)
     m.add(
         types.InlineKeyboardButton("📽️ WATCH DEMO VIDEO", url="https://t.me/+JBVaDAvX-To1NzRl"),
-        types.InlineKeyboardButton(f"💎 UNLOCK PREMIUM ({p})", callback_data=f"pay_{p}"),
+        types.InlineKeyboardButton(f"🔐 PAY Rs. {p} - UNLOCK NOW", callback_data=f"pay_{p}"),
         types.InlineKeyboardButton("💬 CONTACT ADMIN", url="t.me/RAHU_LKING89")
     )
     return m
@@ -137,8 +137,25 @@ def start(m):
 def callback(call):
     if call.data.startswith("pay"):
         p = call.data.split("_")[1]
-        msg = f"💳 <b>UPI:</b> <code>skrashik444@okaxis</code>\nPay Rs. {p} & send screenshot!"
-        bot.send_message(call.message.chat.id, msg, parse_mode='HTML')
+        qr_path = "qr.jpg"  # QR Image ka naam
+        
+        msg_text = (
+            f"🔐 <b>Payment — Rs. {p}</b>\n\n"
+            f"📲 <b>QR Code scan karo aur pay karo</b>\n"
+            f"💰 <b>Amount: Rs. {p}</b>\n\n"
+            f"✅ Pay ke baad niche button dabao → Screenshot bhejo\n"
+            f"📸 <b>Automatic verify ho jayega!</b>"
+        )
+        
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("✅ Maine Pay Kar Diya — Screenshot Bhejo", url="t.me/RAHU_LKING89"))
+        
+        if os.path.exists(qr_path):
+            with open(qr_path, 'rb') as photo:
+                bot.send_photo(call.message.chat.id, photo, caption=msg_text, parse_mode='HTML', reply_markup=markup)
+        else:
+            bot.send_message(call.message.chat.id, msg_text, parse_mode='HTML', reply_markup=markup)
+            
     bot.answer_callback_query(call.id)
 
 # --- STARTING ---
