@@ -8,7 +8,7 @@ from flask import Flask
 # --- CONFIG ---
 API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
 bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
-# Path change karke "./" kar diya taaki Render files ko dhoond sake
+ADMIN_ID = 123456789 # <--- Yahan apni Telegram ID dalen
 PATH = "./" 
 file_id_cache = {} 
 
@@ -133,29 +133,34 @@ def start(m):
         send_fix(uid, f, p, cap)
         time.sleep(0.3)
 
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(func=lambda call: call.data.startswith("pay_"))
 def callback(call):
-    if call.data.startswith("pay"):
-        p = call.data.split("_")[1]
-        qr_path = "qr.jpg"  # QR Image ka naam
-        
-        msg_text = (
-            f"🔐 <b>Payment — Rs. {p}</b>\n\n"
-            f"📲 <b>QR Code scan karo aur pay karo</b>\n"
-            f"💰 <b>Amount: Rs. {p}</b>\n\n"
-            f"✅ Pay ke baad niche button dabao → Screenshot bhejo\n"
-            f"📸 <b>Automatic verify ho jayega!</b>"
-        )
-        
+    p = call.data.split("_")[1]
+    qr_path = "qr.jpg"
+    msg_text = (
+        f"🔐 <b>Payment — Rs. {p}</b>\n\n"
+        f"📲 <b>QR Code scan karo aur pay karo</b>\n"
+        f"💰 <b>Amount: Rs. {p}</b>\n\n"
+        f"✅ Pay ke baad screenshot bot ko bhejo!"
+    )
+    if os.path.exists(qr_path):
+        with open(qr_path, 'rb') as photo:
+            bot.send_photo(call.message.chat.id, photo, caption=msg_text, parse_mode='HTML')
+    bot.answer_callback_query(call.id)
+
+@bot.message_handler(content_types=['photo'])
+def handle_photo(m):
+    if m.chat.id != ADMIN_ID:
+        bot.forward_message(ADMIN_ID, m.chat.id, m.message_id)
         markup = types.InlineKeyboardMarkup()
-        markup.add(types.InlineKeyboardButton("✅ Maine Pay Kar Diya — Screenshot Bhejo", url="t.me/RAHU_LKING89"))
-        
-        if os.path.exists(qr_path):
-            with open(qr_path, 'rb') as photo:
-                bot.send_photo(call.message.chat.id, photo, caption=msg_text, parse_mode='HTML', reply_markup=markup)
-        else:
-            bot.send_message(call.message.chat.id, msg_text, parse_mode='HTML', reply_markup=markup)
-            
+        markup.add(types.InlineKeyboardButton("✅ Click To Approve", callback_data=f"ok_{m.chat.id}"))
+        bot.send_message(ADMIN_ID, "User ne payment bheja hai:", reply_markup=markup)
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("ok_"))
+def approve(call):
+    user_id = call.data.split("_")[1]
+    bot.send_message(user_id, "✅ Payment Verified! Access Mil Gaya!")
+    bot.edit_message_text("✅ Approved!", call.message.chat.id, call.message.message_id)
     bot.answer_callback_query(call.id)
 
 # --- STARTING ---
