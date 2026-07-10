@@ -96,9 +96,9 @@ Price: <strike>Rs. 799.00</strike> <b>Rs. 49.00</b>
 def get_keyboard(p):
     m = types.InlineKeyboardMarkup(row_width=1)
     m.add(
-        types.InlineKeyboardButton("📽️ WATCH DEMO VIDEO", url="https://t.me/kushal"),
-        types.InlineKeyboardButton(f"💎 UNLOCK PREMIUM ({p})", callback_data=f"pay_{p}"),
-        types.InlineKeyboardButton("💬 CONTACT ADMIN", url="https://t.me/kushal_admin")
+        types.InlineKeyboardButton("📽️ WATCH DEMO VIDEO", url="https://t.me/+JBVaDAvX-To1NzRl"),
+        types.InlineKeyboardButton(f"💎 UNLOCK PREMIUM ({p})", https://t.me/+DVwN8sdnvDQ1YWE9"),
+        types.InlineKeyboardButton("💬 CONTACT ADMIN", url="t.me/RAHU_LKING89")
     )
     return m
 
