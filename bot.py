@@ -2,12 +2,23 @@ import telebot
 from telebot import types
 import os
 import time
+import threading
+from flask import Flask
 
 # --- CONFIG ---
-API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
-bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
+API_TOKEN = '8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk'
+bot = telebot.TeleBot(API_TOKEN)
 PATH = "/sdcard/Download/kushal/"
-file_id_cache = {} # Isse second time speed 100x ho jayegi
+file_id_cache = {} 
+
+# --- WEB SERVICE FOR 24/7 ---
+app = Flask(__name__)
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run_web_server():
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
 # --- EXACT VIDEO DATA ---
 T1 = """😍 <b>80000+ zip file's Channel</b> 💔
@@ -94,7 +105,6 @@ def send_fix(uid, f, p, cap):
     full_path = os.path.join(PATH, f)
     markup = get_keyboard(p)
     try:
-        # Caching logic for Instant Speed
         if f in file_id_cache:
             fid = file_id_cache[f]
             if f.endswith(".mp4"): bot.send_video(uid, fid, caption=cap, parse_mode='HTML', reply_markup=markup)
@@ -114,7 +124,6 @@ def send_fix(uid, f, p, cap):
 @bot.message_handler(commands=['start'])
 def start(m):
     uid = m.chat.id
-    # Exact Video Sequence
     data = [
         ("1.jpg", "1,499", T1), ("1.mp4", "499", T2),
         ("2.jpg", "149", T3), ("2.mp4", "99", T4),
@@ -122,7 +131,6 @@ def start(m):
     ]
     for f, p, cap in data:
         send_fix(uid, f, p, cap)
-        # 0.3s gap maintains order without being slow
         time.sleep(0.3)
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -133,5 +141,8 @@ def callback(call):
         bot.send_message(call.message.chat.id, msg, parse_mode='HTML')
     bot.answer_callback_query(call.id)
 
-print("🚀 ULTRA SPEED & PERFECT ORDER LIVE!")
-bot.infinity_polling()
+# --- STARTING ---
+if __name__ == "__main__":
+    threading.Thread(target=run_web_server).start()
+    print("🚀 ULTRA SPEED & PERFECT ORDER LIVE!")
+    bot.infinity_polling()
