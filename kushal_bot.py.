@@ -5,8 +5,8 @@ import os
 
 # --- BASIC CONFIG ---
 # Aapka Original Token fixed
-API_TOKEN = '8650620955:AAGbeAnHtxhYqaGwG9XZaEhkTP7nMLds1cA' 
-bot = telebot.TeleBot(API_TOKEN)
+API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0' 
+bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
 ADMIN_ID = 212552435  # Tera Fixed ID
 UPI_ID = "jamnajamna419@okicici"
 PATH = "/sdcard/Download/kushal/"
