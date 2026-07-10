@@ -8,19 +8,25 @@ from flask import Flask
 # --- CONFIG ---
 API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
 bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
-ADMIN_ID = 6632236983 # <--- Yahan apni Telegram ID dalen
+ADMIN_ID = 123456789  # <--- Yahan apni Telegram ID dalen
 PATH = "./" 
 file_id_cache = {} 
+USER_FILE = "users.txt"
+
+# --- SIDE MENU ---
+def set_menu():
+    commands = [
+        types.BotCommand("start", "Bot Start Karein"),
+        types.BotCommand("users", "Total Users (Admin Only)")
+    ]
+    bot.set_my_commands(commands)
 
 # --- WEB SERVICE FOR 24/7 ---
 app = Flask(__name__)
 @app.route('/')
-def home():
-    return "Bot is running!"
-
+def home(): return "Bot is running!"
 @app.route('/ping')
-def ping():
-    return "Bot is active", 200
+def ping(): return "Bot is active", 200
 
 def run_web_server():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
@@ -121,8 +127,22 @@ def send_fix(uid, f, p, cap):
     except Exception as e:
         print(f"Error: {e}")
 
+@bot.message_handler(commands=['users'])
+def get_users(m):
+    if m.chat.id == ADMIN_ID:
+        if os.path.exists(USER_FILE):
+            with open(USER_FILE, "r") as f:
+                bot.reply_to(m, f"📊 Total Users Joined: {len(f.readlines())}")
+    else:
+        bot.reply_to(m, "Sirf Admin access kar sakte hain.")
+
 @bot.message_handler(commands=['start'])
 def start(m):
+    # Save User
+    if not os.path.exists(USER_FILE): open(USER_FILE, "w").close()
+    with open(USER_FILE, "r+") as f:
+        if str(m.chat.id) not in f.read(): f.write(f"{m.chat.id}\n")
+    
     uid = m.chat.id
     data = [
         ("1.jpg", "1,499", T1), ("1.mp4", "499", T2),
@@ -137,12 +157,7 @@ def start(m):
 def callback(call):
     p = call.data.split("_")[1]
     qr_path = "qr.jpg"
-    msg_text = (
-        f"🔐 <b>Payment — Rs. {p}</b>\n\n"
-        f"📲 <b>QR Code scan karo aur pay karo</b>\n"
-        f"💰 <b>Amount: Rs. {p}</b>\n\n"
-        f"✅ Pay ke baad screenshot bot ko bhejo!"
-    )
+    msg_text = f"🔐 <b>Payment — Rs. {p}</b>\n\n📲 QR Code scan karo aur screenshot bhejo!"
     if os.path.exists(qr_path):
         with open(qr_path, 'rb') as photo:
             bot.send_photo(call.message.chat.id, photo, caption=msg_text, parse_mode='HTML')
@@ -159,12 +174,14 @@ def handle_photo(m):
 @bot.callback_query_handler(func=lambda call: call.data.startswith("ok_"))
 def approve(call):
     user_id = call.data.split("_")[1]
-    bot.send_message(user_id, "✅ Payment Verified! Access Mil Gaya!")
+    msg = "✅ Payment Verified! Access Mil Gaya!\n\n💋 WATCH VIRAL MEMES FULL VIDEO 💋\n\n⚡️ JOIN OUR CHANNEL\n\n💋 𝐃𝐄𝐒𝐈 𝐌𝐀𝐀𝐋 💋\nhttps://t.me/+DVwN8sdnvDQ1YWE9\n\n❤️‍🔥 𝗝𝗔𝗣𝗔𝗡𝗘𝗦𝗘 𝗛𝗨𝗕 ❤️‍🔥\nhttps://t.me/+b9VNf96P_Z9mNjk1"
+    bot.send_message(user_id, msg, parse_mode='HTML')
     bot.edit_message_text("✅ Approved!", call.message.chat.id, call.message.message_id)
     bot.answer_callback_query(call.id)
 
 # --- STARTING ---
 if __name__ == "__main__":
     threading.Thread(target=run_web_server).start()
-    print("🚀 ULTRA SPEED & PERFECT ORDER LIVE!")
+    set_menu()
+    print("🚀 BOT LIVE!")
     bot.infinity_polling()
