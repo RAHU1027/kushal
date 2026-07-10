@@ -97,7 +97,7 @@ def get_keyboard(p):
     m = types.InlineKeyboardMarkup(row_width=1)
     m.add(
         types.InlineKeyboardButton("📽️ WATCH DEMO VIDEO", url="https://t.me/+JBVaDAvX-To1NzRl"),
-        types.InlineKeyboardButton(f"💎 UNLOCK PREMIUM ({p})", https://t.me/+DVwN8sdnvDQ1YWE9"),
+        types.InlineKeyboardButton(f"💎 UNLOCK PREMIUM ({p})"https://t.me/+DVwN8sdnvDQ1YWE9"),
         types.InlineKeyboardButton("💬 CONTACT ADMIN", url="t.me/RAHU_LKING89")
     )
     return m
