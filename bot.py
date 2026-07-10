@@ -4,8 +4,8 @@ import os
 import time
 
 # --- CONFIG ---
-API_TOKEN = '8650620955:AAGbeAnHtxhYqaGwG9XZaEhkTP7nMLds1cA'
-bot = telebot.TeleBot(API_TOKEN)
+API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
+bot = telebot.TeleBot(8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk)
 PATH = "/sdcard/Download/kushal/"
 file_id_cache = {} # Isse second time speed 100x ho jayegi
 
