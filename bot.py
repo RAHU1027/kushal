@@ -1,7 +1,6 @@
 import telebot
 from telebot import types
 import os
-import time
 import threading
 from flask import Flask
 
@@ -119,11 +118,9 @@ def send_fix(uid, f, p, cap):
         if os.path.exists(full_path):
             with open(full_path, 'rb') as file:
                 if f.endswith(".mp4"):
-                    s = bot.send_video(uid, file, caption=cap, parse_mode='HTML', reply_markup=markup, supports_streaming=True)
-                    file_id_cache[f] = s.video.file_id
+                    bot.send_video(uid, file, caption=cap, parse_mode='HTML', reply_markup=markup, supports_streaming=True)
                 else:
-                    s = bot.send_photo(uid, file, caption=cap, parse_mode='HTML', reply_markup=markup)
-                    file_id_cache[f] = s.photo[-1].file_id
+                    bot.send_photo(uid, file, caption=cap, parse_mode='HTML', reply_markup=markup)
     except Exception as e:
         print(f"Error: {e}")
 
@@ -138,20 +135,33 @@ def get_users(m):
 
 @bot.message_handler(commands=['start'])
 def start(m):
-    # Save User
-    if not os.path.exists(USER_FILE): open(USER_FILE, "w").close()
-    with open(USER_FILE, "r+") as f:
-        if str(m.chat.id) not in f.read(): f.write(f"{m.chat.id}\n")
-    
-    uid = m.chat.id
-    data = [
-        ("1.jpg", "1,499", T1), ("1.mp4", "499", T2),
-        ("2.jpg", "149", T3), ("2.mp4", "99", T4),
-        ("3.jpg", "69", T5), ("3.mp4", "49", T6)
-    ]
-    for f, p, cap in data:
-        send_fix(uid, f, p, cap)
-        time.sleep(0.3)
+    def save_and_send():
+        if not os.path.exists(USER_FILE): 
+            open(USER_FILE, "w").close()
+        
+        user_id_str = str(m.chat.id)
+        with open(USER_FILE, "r+") as f:
+            content = f.read()
+            if user_id_str not in content:
+                f.write(f"{user_id_str}\n")
+        
+        uid = m.chat.id
+        data = [
+            ("1.jpg", "1,499", T1), ("1.mp4", "499", T2),
+            ("2.jpg", "149", T3), ("2.mp4", "99", T4),
+            ("3.jpg", "69", T5), ("3.mp4", "49", T6)
+        ]
+        
+        threads = []
+        for f, p, cap in data:
+            t = threading.Thread(target=send_fix, args=(uid, f, p, cap))
+            threads.append(t)
+            t.start()
+        
+        for t in threads:
+            t.join()
+
+    threading.Thread(target=save_and_send).start()
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("pay_"))
 def callback(call):
