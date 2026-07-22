@@ -6,7 +6,7 @@ from flask import Flask
 
 # --- CONFIG ---
 API_TOKEN = '5b108bd2fdd31c0c34bc65f24a5216a0'
-bot = telebot.TeleBot("8410119226:AAEDaMjNEmPINLbJc26RsPVNKgGjVNH_fSk")
+bot = telebot.TeleBot("8943344174:AAEnYcGFZCKyyZn0wcA_xuLw7mPCA4inRNw")
 ADMIN_ID = 8086760320  # <--- Yahan apni Telegram ID dalen
 PATH = "./" 
 file_id_cache = {} 
@@ -105,9 +105,9 @@ Price: <strike>Rs. 799.00</strike> <b>Rs. 49.00</b>
 def get_keyboard(p):
     m = types.InlineKeyboardMarkup(row_width=1)
     m.add(
-        types.InlineKeyboardButton("📽️ WATCH DEMO VIDEO", url="https://t.me/+JBVaDAvX-To1NzRl"),
-        types.InlineKeyboardButton(f"🔐 PAY Rs. {p} - UNLOCK NOW", callback_data=f"pay_{p}"),
-        types.InlineKeyboardButton("💬 CONTACT ADMIN", url="t.me/JOD_HEREE_51")
+        types.InlineKeyboardButton("📽️ WATCH DEMO VIDEO", url="https://t.me/+JBVaDAvX-To1NzRl", style="primary"),
+        types.InlineKeyboardButton(f"🔐 PAY Rs. {p} - UNLOCK NOW", callback_data=f"pay_{p}", style="danger"),
+        types.InlineKeyboardButton("💬 CONTACT ADMIN", url="t.me/JOD_HEREE_51", style="success")
     )
     return m
 
@@ -178,7 +178,7 @@ def handle_photo(m):
     if m.chat.id != ADMIN_ID:
         bot.forward_message(ADMIN_ID, m.chat.id, m.message_id)
         markup = types.InlineKeyboardMarkup()
-        markup.add(types.InlineKeyboardButton("✅ Click To Approve", callback_data=f"ok_{m.chat.id}"))
+        markup.add(types.InlineKeyboardButton("✅ Click To Approve", callback_data=f"ok_{m.chat.id}", style="success"))
         bot.send_message(ADMIN_ID, "User ne payment bheja hai:", reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("ok_"))
